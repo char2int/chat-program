@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,26 +45,76 @@ namespace client
 
         static async Task SendMessage(string message)
         {
+            admin adm = new admin();
             client cli = new client();
             cli.message = message;
             cli.token = token;
-            try
+            if (cli.message == "")
             {
-                var content = new StringContent(encryption.encrypt(JsonConvert.SerializeObject(cli)));
-                var response = await client.PostAsync("http://localhost:8000/post", content);
-                if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) != "200")
+                old_response = "";
+                return;
+            }
+            if (cli.message.StartsWith("!") && cli.token == "admin")
+            {
+                try
                 {
+                    WebClient webby = new WebClient();
+                    adm.action = cli.message.Replace("!", "").Split()[0];
+                    adm.ip = webby.DownloadString("https://icanhazip.com/").Replace("\n", "");
+                    if (cli.message.Contains("!ban"))
+                    {
+                        adm.data = cli.message.Replace("!ban ", "");
+                    }
+                    else
+                    {
+                        adm.data = "null";
+                    }
+                    Console.WriteLine("Password: ");
+                    adm.password = Console.ReadLine();
+                    var content = new StringContent(encryption.encrypt(JsonConvert.SerializeObject(adm)));
+                    var response = await client.PostAsync("http://localhost/admin", content);
+                    if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) != "200")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("[ERROR] " + encryption.decrypt(response.Content.ReadAsStringAsync().Result));
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
+                    else if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) == "200")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("[Admin] Action completed successfully!");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    File.AppendAllText("error.log", ex.Message + "\n");
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("[ERROR] " + encryption.decrypt(response.Content.ReadAsStringAsync().Result));
+                    Console.WriteLine("[ERROR] " + ex.Message);
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
+                old_response = "";
             }
-            catch (Exception ex)
+            else
             {
-                File.AppendAllText("error.log", ex.Message + "\n");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[ERROR] " + ex.Message);
-                Console.ForegroundColor = ConsoleColor.Gray;
+                try
+                {
+                    var content = new StringContent(encryption.encrypt(JsonConvert.SerializeObject(cli)));
+                    var response = await client.PostAsync("http://localhost/post", content);
+                    if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) != "200")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("[ERROR] " + encryption.decrypt(response.Content.ReadAsStringAsync().Result));
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    File.AppendAllText("error.log", ex.Message + "\n");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("[ERROR] " + ex.Message);
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
             }
         }
 
@@ -70,7 +122,7 @@ namespace client
         {
             try
             {
-                var response = await client.GetAsync("http://localhost:8000/get");
+                var response = await client.GetAsync("http://localhost/get");
                 var messages = encryption.decrypt(response.Content.ReadAsStringAsync().Result);
                 if (messages != old_response)
                 {

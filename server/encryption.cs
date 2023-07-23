@@ -8,6 +8,8 @@ namespace server
 {
     internal class encryption
     {
+        private const string key = "char2int023948";
+
         public static string encrypt(string input)
         {
             return convert(XOR(input), true);
@@ -21,7 +23,7 @@ namespace server
         private static string XOR(string input)
         {
             DateTime time = DateTime.UtcNow;
-            char[] key = $"char2int023948{time.Minute}".ToCharArray();
+            char[] key = $"{encryption.key}{time.Minute}".ToCharArray();
             char[] output = new char[input.Length];
             for (int i = 0; i < input.Length; i++)
             {
@@ -47,6 +49,8 @@ namespace server
 
     internal class serverencryption
     {
+        private const string key = "9823hfsaldchar2int";
+
         public static string encrypt(string input)
         {
             return convert(XOR(input), true);
@@ -59,7 +63,7 @@ namespace server
 
         private static string XOR(string input)
         {
-            char[] key = $"9823hfsaldchar2int".ToCharArray();
+            char[] key = serverencryption.key.ToCharArray();
             char[] output = new char[input.Length];
             for (int i = 0; i < input.Length; i++)
             {

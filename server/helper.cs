@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace server
     internal class helper
     {
         private static string file = "logs.txt";
-
+        public static bool shutdown { get; set; }
         public static void SaveMessage(string message) 
         {
             try
@@ -41,6 +42,32 @@ namespace server
                 return "";
             }
 
+        }
+
+        public static string AdminAction(string action, string data)
+        {
+            switch (action)
+            {
+                case "ban":
+                    BanUser(data); return "200";
+                case "clear":
+                    ClearChat(); return "200";
+                case "shutdown":
+                    shutdown = true; return "200";
+                default:
+                    return "200";
+            }
+        }
+
+        private static void BanUser(string username)
+        {
+
+        }
+
+        private static void ClearChat()
+        {
+            File.WriteAllText(file, "");
+            SaveMessage("Chat Cleared!");
         }
     }
 }
