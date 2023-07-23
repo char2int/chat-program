@@ -1,0 +1,11 @@
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\server.exe.config
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\server.exe
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\server.pdb
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.AssemblyReference.cache
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.SuggestedBindingRedirects.cache
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.CoreCompileInputs.cache
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.exe
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.pdb
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\Newtonsoft.Json.dll
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\Newtonsoft.Json.xml
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.CopyComplete
