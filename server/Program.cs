@@ -11,7 +11,6 @@ namespace server
     {
         public static HttpListener listener;
         public static string url = "http://localhost:8000/";
-        static server lclser = new server();
         public static async Task HandleIncomingConnections()
         {
             bool runServer = true;
@@ -23,7 +22,6 @@ namespace server
                 // Peel out the requests and response objects
                 HttpListenerRequest req = ctx.Request;
                 HttpListenerResponse resp = ctx.Response;
-                server serv = new server();
                 client cli = new client();
                 Console.WriteLine(req.Url.ToString());
                 Console.WriteLine(req.HttpMethod);
@@ -41,13 +39,13 @@ namespace server
                     }
                     if (text == null || text == "")
                     {
-                        serv.status = 403;
+                        // 403
+                        resp.Close();
                     }
-                    serv.status = 200;
                     cli = JsonConvert.DeserializeObject<client>(encryption.decrypt(text));
-                    Console.WriteLine($"Message: {cli.message} | Token: {cli.token}");
-                    lclser.messages.Add(cli.message);
-                    byte[] data = Encoding.UTF8.GetBytes(encryption.encrypt(JsonConvert.SerializeObject(serv)));
+                    Console.WriteLine($"Message saved from {cli.token}!");
+                    helper.SaveMessage($"{cli.token} - {cli.message}");
+                    byte[] data = Encoding.UTF8.GetBytes(encryption.encrypt("200"));
                     resp.ContentType = "text/json";
                     resp.ContentEncoding = Encoding.UTF8;
                     resp.ContentLength64 = data.LongLength;
@@ -56,9 +54,7 @@ namespace server
                 }
                 if ((req.HttpMethod == "GET") &&  (req.Url.AbsolutePath == "/get"))
                 {
-                    serv.status = 200;
-                    lclser.status = serv.status;
-                    byte[] data = Encoding.UTF8.GetBytes(encryption.encrypt(JsonConvert.SerializeObject(lclser)));
+                    byte[] data = Encoding.UTF8.GetBytes(encryption.encrypt(helper.getMessages()));
                     resp.ContentType = "text/json";
                     resp.ContentEncoding = Encoding.UTF8;
                     resp.ContentLength64 = data.LongLength;
