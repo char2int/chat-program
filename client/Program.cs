@@ -15,7 +15,7 @@ namespace client
 {
     internal class Program
     {
-        private const bool dev = true;
+        private const bool dev = false;
         private static WebClient client2 = new WebClient();
         private static string url = client2.DownloadString("https://raw.githubusercontent.com/char2int/chat-program/main/address.txt").Replace("\n", "");
         private static string latest_hash = client2.DownloadString("https://raw.githubusercontent.com/char2int/chat-program/main/latest.HASH").Replace("\n", "");
