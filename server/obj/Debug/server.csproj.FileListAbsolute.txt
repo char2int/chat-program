@@ -6,6 +6,7 @@ C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.Sugg
 C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.CoreCompileInputs.cache
 C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.exe
 C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.pdb
-C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\Newtonsoft.Json.dll
 C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\Newtonsoft.Json.xml
 C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.CopyComplete
+C:\Users\samzy\Documents\GitHub\chat-program\server\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\samzy\Documents\GitHub\chat-program\server\obj\Debug\server.csproj.Fody.CopyLocal.cache

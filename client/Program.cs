@@ -14,13 +14,12 @@ namespace client
     internal class Program
     {
         private static WebClient client2 = new WebClient();
-        private static string url = client2.DownloadString("https://raw.githubusercontent.com/char2int/blog/main/address.txt").Replace("\n", "");
+        private static string url = client2.DownloadString("https://raw.githubusercontent.com/char2int/chat-program/main/address.txt").Replace("\n", "");
         private static readonly HttpClient client = new HttpClient();
         private static string token { get; set; }
         private static string old_response { get; set; }
         static async Task Main(string[] args)
         {
-            Console.WriteLine($"{url}/post");
             Console.Title = "Log In | ConsoleMessenger";
             Console.WriteLine("Username: ");
             token = Console.ReadLine();
