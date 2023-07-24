@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
@@ -16,7 +17,7 @@ namespace server
         {
             try
             {
-                string old_messages = getMessages();
+                string old_messages = getMessages().Replace("Chat Cleared!\n", "");
                 string message2save = old_messages + "\n" + message;
                 using (StreamWriter writer = new StreamWriter(file))
                 {
@@ -61,7 +62,25 @@ namespace server
 
         private static void BanUser(string username)
         {
+            banned b_users = JsonConvert.DeserializeObject<banned>(File.ReadAllText("banned.json"));
+            User new_banned = new User();
+            new_banned.ip = "";
+            new_banned.username = username;
+            b_users.users.Add(new_banned);
+            File.WriteAllText("banned.json", JsonConvert.SerializeObject(b_users));
+        }
 
+        public static void addIP(string username, string ip)
+        {
+            banned b_users = JsonConvert.DeserializeObject<banned>(File.ReadAllText("banned.json"));
+            foreach (var user in b_users.users)
+            {
+                if (user.username == username)
+                {
+                    user.ip = ip;
+                }
+            }
+            File.WriteAllText("banned.json", JsonConvert.SerializeObject(b_users));
         }
 
         private static void ClearChat()

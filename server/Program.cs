@@ -27,6 +27,8 @@ namespace server
                 HttpListenerContext ctx = await listener.GetContextAsync();
                 requests++;
                 bool save = true;
+                bool banned = false;
+                bool ip_banned = false;
                 // Peel out the requests and response objects
                 HttpListenerRequest req = ctx.Request;
                 HttpListenerResponse resp = ctx.Response;
@@ -52,7 +54,6 @@ namespace server
                     {
                         save = false;
                     }
-                    Console.WriteLine($"Message saved from {cli.token}!");
                     string data_response = "200";
 
                     if (req.RemoteEndPoint.Address != null && b_users != null)
@@ -61,16 +62,28 @@ namespace server
                         {
                             if (cli.token == user.username)
                             {
+                                helper.addIP(cli.token, req.RemoteEndPoint.Address.ToString());
                                 data_response = "user banned";
+                                banned = true;
                                 save = false;
                             }
                             if (req.RemoteEndPoint.Address.ToString() == user.ip)
                             {
                                 data_response = "ip banned";
+                                ip_banned = true;
                                 save = false;
                             }
                         }
                     }
+                    if (!banned && !ip_banned)
+                    {
+                        Console.WriteLine($"Message saved from {cli.token}!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Message skipped from banned user!");
+                    }
+                    
                     if (save)
                     {
                         helper.SaveMessage($"{cli.token} - {cli.message}");

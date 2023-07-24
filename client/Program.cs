@@ -13,11 +13,14 @@ namespace client
 {
     internal class Program
     {
+        private static WebClient client2 = new WebClient();
+        private static string url = client2.DownloadString("https://raw.githubusercontent.com/char2int/blog/main/address.txt").Replace("\n", "");
         private static readonly HttpClient client = new HttpClient();
         private static string token { get; set; }
         private static string old_response { get; set; }
         static async Task Main(string[] args)
         {
+            Console.WriteLine($"{url}/post");
             Console.Title = "Log In | ConsoleMessenger";
             Console.WriteLine("Username: ");
             token = Console.ReadLine();
@@ -72,7 +75,7 @@ namespace client
                     Console.WriteLine("Password: ");
                     adm.password = Console.ReadLine();
                     var content = new StringContent(encryption.encrypt(JsonConvert.SerializeObject(adm)));
-                    var response = await client.PostAsync("http://localhost/admin", content);
+                    var response = await client.PostAsync($"{url}/admin", content);
                     if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) != "200")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -100,7 +103,7 @@ namespace client
                 try
                 {
                     var content = new StringContent(encryption.encrypt(JsonConvert.SerializeObject(cli)));
-                    var response = await client.PostAsync("http://localhost/post", content);
+                    var response = await client.PostAsync($"{url}/post", content);
                     if (encryption.decrypt(response.Content.ReadAsStringAsync().Result) != "200")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -122,7 +125,7 @@ namespace client
         {
             try
             {
-                var response = await client.GetAsync("http://localhost/get");
+                var response = await client.GetAsync($"{url}/get");
                 var messages = encryption.decrypt(response.Content.ReadAsStringAsync().Result);
                 if (messages != old_response)
                 {
