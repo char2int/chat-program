@@ -1,2 +1,4 @@
-# chat program
- server and client for chatting
+# ConsoleMessenger
+A messenging solution in the console!
+
+#todo
